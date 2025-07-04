@@ -1,0 +1,110 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+using namespace std;
+
+struct Mahasiswa {
+    string nama;
+    string nim;
+    float kalkulus;
+    float strukturData;
+    float alIslam;
+    float pancasila;
+    float matematikaDiskrit;
+    float ilmuBudayaSosialDasar;
+    float perancanganSistemInformasi;
+    float rata_rata;
+    string indeks;
+};
+
+// Fungsi untuk menghitung rata-rata
+float hitungRataRata(Mahasiswa &mhs) {
+    return (mhs.kalkulus + mhs.strukturData + mhs.alIslam + mhs.pancasila +
+            mhs.matematikaDiskrit + mhs.ilmuBudayaSosialDasar + mhs.perancanganSistemInformasi) / 7;
+}
+
+// Fungsi menentukan indeks nilai
+string tentukanIndeks(float nilai) {
+    if (nilai >= 80) return "A";
+    else if (nilai >= 70) return "B";
+    else if (nilai >= 55) return "C";
+    else if (nilai >= 40) return "D";
+    else return "E";
+}
+
+// Fungsi mengurutkan berdasarkan nilai rata-rata (bubble sort menurun)
+void bubbleSort(Mahasiswa arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j].rata_rata < arr[j + 1].rata_rata) {
+                swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+
+// Fungsi mencari NIM dengan nilai tertinggi
+string cariNilaiTertinggi(Mahasiswa arr[], int n) {
+    float max = arr[0].rata_rata;
+    string nim_tertinggi = arr[0].nim;
+    for (int i = 1; i < n; i++) {
+        if (arr[i].rata_rata > max) {
+            max = arr[i].rata_rata;
+            nim_tertinggi = arr[i].nim;
+        }
+    }
+    return nim_tertinggi;
+}
+
+// Fungsi input nilai mahasiswa
+void inputMahasiswa(Mahasiswa &mhs) {
+    cout << "Nama Mahasiswa     : "; cin >> mhs.nama;
+    cout << "NIM                : "; cin >> mhs.nim;
+    cout << "Nilai Kalkulus     : "; cin >> mhs.kalkulus;
+    cout << "Struktur Data      : "; cin >> mhs.strukturData;
+    cout << "Al Islam           : "; cin >> mhs.alIslam;
+    cout << "Pancasila          : "; cin >> mhs.pancasila;
+    cout << "Matematika Diskrit : "; cin >> mhs.matematikaDiskrit;
+    cout << "IBSD               : "; cin >> mhs.ilmuBudayaSosialDasar;
+    cout << "PSI                : "; cin >> mhs.perancanganSistemInformasi;
+    
+    mhs.rata_rata = hitungRataRata(mhs);
+    mhs.indeks = tentukanIndeks(mhs.rata_rata);
+}
+
+// Fungsi cetak hasil
+void tampilkanMahasiswa(Mahasiswa arr[], int n) {
+    cout << "\n========================================================================================\n";
+    cout << "| No |     Nama     |     NIM     | Rata-rata | Indeks |" << endl;
+    cout << "========================================================================================\n";
+    for (int i = 0; i < n; i++) {
+        cout << "| " << setw(2) << i + 1 << " | "
+             << setw(12) << left << arr[i].nama << " | "
+             << setw(11) << arr[i].nim << " | "
+             << setw(10) << fixed << setprecision(2) << arr[i].rata_rata << " | "
+             << "   " << arr[i].indeks << "   |" << endl;
+    }
+    cout << "========================================================================================\n";
+}
+
+int main() {
+    const int jumlahMahasiswa = 4;
+    Mahasiswa mhs[jumlahMahasiswa];
+
+    cout << "=============================================================\n";
+    cout << "     PROGRAM MENGHITUNG NILAI AKHIR MAHASISWA UMJ          \n";
+    cout << "=============================================================\n";
+
+    for (int i = 0; i < jumlahMahasiswa; i++) {
+        cout << "\nInput Data Mahasiswa ke-" << i + 1 << endl;
+        cout << "-------------------------------------------------------------\n";
+        inputMahasiswa(mhs[i]);
+    }
+
+    bubbleSort(mhs, jumlahMahasiswa);
+    tampilkanMahasiswa(mhs, jumlahMahasiswa);
+
+    cout << "\nMahasiswa dengan nilai tertinggi (berdasarkan NIM): " << cariNilaiTertinggi(mhs, jumlahMahasiswa) << endl;
+
+    return 0;
+}
